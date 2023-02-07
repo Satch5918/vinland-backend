@@ -15,9 +15,20 @@ const controller = {
     }
   },
   my_purchases: async ( req, res, next ) => {
-    req.body.buyer_id = "Soy un id"
+    req.body.buyer_id = "Soy un i"
     try {
       const purchases = await Purchase.find({ buyer_id: req.body.buyer_id })
+      req.body.success = true
+      req.body.sc = 200
+      req.body.data = purchases
+      return defaultResponse(req, res)
+    } catch (error) {
+      next(error)
+    }
+  },
+  read: async ( req, res, next ) => {
+    try {
+      const purchases = await Purchase.find()
       req.body.success = true
       req.body.sc = 200
       req.body.data = purchases
