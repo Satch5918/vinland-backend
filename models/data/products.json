@@ -1,0 +1,35 @@
+[
+  {
+    "genre": "Metal",
+    "name": "Tenacious D",
+    "photo": "",
+    "price": 2,
+    "stock": 30,
+    "demo": "",
+    "description": "Best band in the world",
+    "artist": "Tenacious D",
+    "sales": 3
+  },
+  {
+    "genre": "Rap",
+    "name": "Si",
+    "photo": "",
+    "price": 2,
+    "stock": 30,
+    "demo": "",
+    "description": "Best band in the world",
+    "artist": "de esos de ahi",
+    "sales": 3
+  },
+  {
+    "genre": "blues",
+    "name": "aaaaa",
+    "photo": "",
+    "price": 2,
+    "stock": 30,
+    "demo": "",
+    "description": "Best band in the world",
+    "artist": "the ink spot",
+    "sales": 3
+  }
+]
