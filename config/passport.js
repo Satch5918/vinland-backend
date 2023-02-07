@@ -1,6 +1,7 @@
 import passport from 'passport'
 import passportJwt from 'passport-jwt'
 import { User } from '../models/User.js'
+import 'dotenv/config.js'
 const { KEY_JWT } = process.env
 
 passport.use(
@@ -16,7 +17,7 @@ passport.use(
                 if (user) {
                     user = { //este es el objeto user que se "inyecta" al req
                         //aqui es donde protejo los datos del usuario
-                        mail: user.mail,
+                        email: user.email,
                         name: user.name,
                         is_admin: user.is_admin,
                         is_buyer: user.is_buyer,
