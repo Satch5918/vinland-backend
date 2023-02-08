@@ -2,7 +2,7 @@ import { User } from '../models/User.js'
 import defaultResponse from '../config/response.js'
 
 async function accountExistsSignUp(req,res,next) {
-    const user = await User.findOne({mail: req.body.mail})
+    const user = await User.findOne({email: req.body.email})
     if (user) {
         req.body.success = false
         req.body.sc = 400

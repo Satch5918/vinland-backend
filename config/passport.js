@@ -21,6 +21,7 @@ passport.use(
                         name: user.name,
                         is_admin: user.is_admin,
                         is_buyer: user.is_buyer,
+                        is_verified: user.is_verified,
                         id: user._id
                     }
                     return done(null, user)
