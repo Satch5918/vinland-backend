@@ -1,4 +1,3 @@
-import createError from 'http-errors';
 import "dotenv/config.js";
 import "./config/database.js";
 import express from 'express';
@@ -24,8 +23,9 @@ app.use(express.urlencoded({ extended: false }));
 app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
 app.use(cors())
-
 app.use('/api', indexRouter);
+
+
 
 app.use(notFoundHandler)
 app.use(errorHandler)
