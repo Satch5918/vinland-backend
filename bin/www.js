@@ -8,6 +8,7 @@ import app from '../app.js';
 import debug from 'debug'
 const logger = debug('vinland-backend:server');
 import http from 'http'
+import 'dotenv/config.js'
 
 /**
  * Get port from environment and store in Express.

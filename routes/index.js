@@ -7,7 +7,7 @@ import mercadopago from './mercadopago.route.js'
 let router = express.Router();
 import product from './product.js'
 import genre from './genre.js';
-
+import purchase from './purchase.js'
 
 /* GET home page. */
 router.get('/', function(req, res, next) {
@@ -22,5 +22,7 @@ router.use('/buyer',buyers)
 
 router.use('/product',product)
 router.use('/genre',genre)
+
+router.use('/purchase', purchase)
 
 export default router;
