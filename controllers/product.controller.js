@@ -4,30 +4,7 @@ import defaultResponse from "../config/response.js";
 const controller = {
   create: async (req, res, next) => {
     try {
-      const {
-        genre,
-        name,
-        photo,
-        price,
-        stock,
-        demo,
-        description,
-        artist,
-        date,
-        sales,
-      } = req.body;
-      await Product.create({
-        genre,
-        name,
-        photo,
-        price,
-        stock,
-        demo,
-        description,
-        artist,
-        date,
-        sales,
-      });
+      await Product.create(req.body);
       req.body.success = true;
       req.body.sc = 201;
       req.body.data = "new product";

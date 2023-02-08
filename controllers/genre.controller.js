@@ -4,11 +4,7 @@ import defaultResponse from "../config/response.js";
 const controller = {
   create: async (req, res, next) => {
     try {
-      const { name, description } = req.body;
-      await Genre.create({
-        name,
-        description,
-      });
+      await Genre.create(req.body);
       req.body.success = true;
       req.body.sc = 201;
       req.body.data = " genre created";
