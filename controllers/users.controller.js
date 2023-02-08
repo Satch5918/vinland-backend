@@ -9,9 +9,8 @@ const controller = {
     signup: async (req, res, next) => {
         req.body.is_online = false //agrego las propiedades que el cliente NO envió
         req.body.is_admin = false
-        req.body.is_buyer = false
-        req.body.is_locked = false
-        req.body.is_verified = false //por ahora en true
+        req.body.is_buyer = true
+        req.body.is_verified = false
         req.body.verify_code = crypto.randomBytes(10).toString('hex') //defino el codigo de verificacion por mail
         req.body.password = bcryptjs.hashSync(req.body.password, 10) //encripto o hasheo la contraseña
         try {
@@ -22,6 +21,7 @@ const controller = {
             req.body.data = 'user created' //agrego el mensaje o información que necesito enviarle al cliente
             return defaultResponse(req,res) //retorno la respuesta default
         } catch (error) {
+            console.log(error)
             next(error) //respuesta del manejador de errores
         }
     },
@@ -48,7 +48,7 @@ const controller = {
                     is_admin: user.is_admin,
                     is_buyer: user.is_author,
                     is_lock: user.is_lock,
-                    is_verified: user.is_verified
+                    /* is_verified: user.is_verified */
                 }
                 req.body.success = true
                 req.body.sc = 200

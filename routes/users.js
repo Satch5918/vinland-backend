@@ -8,6 +8,7 @@ import accountHasBeenVerified from './../middlewares/accountHasBeenVerified.js'
 import mustSignIn from '../middlewares/mustSignIn.js'
 import controller from '../controllers/users.controller.js'
 import passport from '../config/passport.js'
+
 const { signup,signin,signintoken,signout,read } = controller
 
 let router = express.Router()
