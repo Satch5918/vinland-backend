@@ -9,5 +9,5 @@ const genres = new mongoose.Schema({
 },{timestamps:true})
 
 
-export const Gender =mongoose.model('genres',genres ) ;
+export const Genre =mongoose.model('genres',genres ) ;
 
