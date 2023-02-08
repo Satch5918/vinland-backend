@@ -1,5 +1,4 @@
-/* import { User } from '../models/User.js' */
-
+import { User } from '../models/User.js' 
 import bcryptjs from 'bcryptjs' //modulo para hashear la contraseña
 import crypto from 'crypto' //modulo para generar codigos aleatorios
 import jwt from 'jsonwebtoken' //modulo para utilizar los metodos de jwt
@@ -10,9 +9,9 @@ const controller = {
     signup: async (req, res, next) => {
         req.body.is_online = false //agrego las propiedades que el cliente NO envió
         req.body.is_admin = false
-        req.body.is_author = false
-        req.body.is_company = false
-        req.body.is_verified = true //por ahora en true
+        req.body.is_buyer = true
+        req.body.is_lock = false
+        req.body.is_verified = false
         req.body.verify_code = crypto.randomBytes(10).toString('hex') //defino el codigo de verificacion por mail
         req.body.password = bcryptjs.hashSync(req.body.password, 10) //encripto o hasheo la contraseña
         try {
@@ -23,6 +22,7 @@ const controller = {
             req.body.data = 'user created' //agrego el mensaje o información que necesito enviarle al cliente
             return defaultResponse(req,res) //retorno la respuesta default
         } catch (error) {
+            console.log(error)
             next(error) //respuesta del manejador de errores
         }
     },
@@ -34,7 +34,7 @@ const controller = {
             const verified = bcryptjs.compareSync(password, user.password) //comparo contraseña
             if(verified) {
                 await User.findOneAndUpdate( //busco y actualizo
-                    { mail: user.mail }, //parametro de busqueda
+                    { email: user.email }, //parametro de busqueda
                     { is_online: true }, //parametro a modificar
                     { new: true } //especificacion que reemplace el documento de origen
                 )
@@ -45,12 +45,11 @@ const controller = {
                 )
                 //console.log(token)
                 user = { //protejo mas datos sensibles
-                    mail: user.mail,
-                    photo: user.photo,
+                    email: user.email,
                     is_admin: user.is_admin,
-                    is_author: user.is_author,
-                    is_company: user.is_company,
-                    is_verified: user.is_verified
+                    is_buyer: user.is_author,
+                    is_lock: user.is_lock,
+                    /* is_verified: user.is_verified */
                 }
                 req.body.success = true
                 req.body.sc = 200
@@ -79,11 +78,11 @@ const controller = {
     },
 
     signout: async (req, res, next) => {
-        const { mail } = req.user
+        const { email } = req.user
         try {
             //si tiene éxito debe cambiar online de true a false
             await User.findOneAndUpdate(
-                { mail }, //parametro de busqueda
+                { email }, //parametro de busqueda
                 { is_online: false }, //parametro a modificar
                 { new: true } //especificacion que reemplace el documento de origen
 
