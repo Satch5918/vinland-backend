@@ -3,6 +3,18 @@ import bcryptjs from 'bcryptjs' //modulo para hashear la contraseña
 import crypto from 'crypto' //modulo para generar codigos aleatorios
 import jwt from 'jsonwebtoken' //modulo para utilizar los metodos de jwt
 import defaultResponse from '../config/response.js'
+import { Buyer } from '../models/Buyer.js'
+
+const newBuyer = async (user_id) => {
+    const data = {
+        user_id,
+        address: ' ',
+        city: ' ',
+        country: ' ',
+        pursaches: []
+    }
+    await Buyer.create(data)
+}
 
 const controller = {
 
@@ -16,7 +28,8 @@ const controller = {
         req.body.password = bcryptjs.hashSync(req.body.password, 10) //encripto o hasheo la contraseña
         try {
             //await accountVerificationEmail(req,res) //envío mail de verificación (SPRINT-4)
-            await User.create(req.body) //crea el usuario
+            const newUser = await User.create(req.body) //crea el usuario
+            await newBuyer(newUser._id)
             req.body.success = true
             req.body.sc = 201 //agrego el codigo de estado
             req.body.data = 'user created' //agrego el mensaje o información que necesito enviarle al cliente
