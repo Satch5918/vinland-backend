@@ -11,7 +11,6 @@ const schema = new mongoose.Schema(
         is_online: {type: Boolean, required: true},
         is_verified: {type: Boolean, required: true},
         verify_code: {type: String, required: true},
-        login_attemps: {type: Number,  required: true},
         is_lock: {type: Boolean, required: true},
     },{
         timestamps: true

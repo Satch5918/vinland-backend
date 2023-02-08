@@ -10,6 +10,7 @@ const controller = {
         req.body.is_online = false //agrego las propiedades que el cliente NO envió
         req.body.is_admin = false
         req.body.is_buyer = true
+        req.body.is_lock = false
         req.body.is_verified = false
         req.body.verify_code = crypto.randomBytes(10).toString('hex') //defino el codigo de verificacion por mail
         req.body.password = bcryptjs.hashSync(req.body.password, 10) //encripto o hasheo la contraseña
