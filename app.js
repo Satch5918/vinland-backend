@@ -10,6 +10,7 @@ import { __filename, __dirname} from './utils.js'
 import { notFoundHandler } from './middlewares/notFoundHandler.js'
 import { errorHandler } from './middlewares/errorHandler.js'
 import cors from 'cors'
+import './config/mercadopago.js'
 
 let app = express();
 
@@ -29,11 +30,4 @@ app.use('/api', indexRouter);
 app.use(notFoundHandler)
 app.use(errorHandler)
 
-app.use('/api', indexRouter);
-
-
-
-
-app.use(notFoundHandler)
-app.use(errorHandler)
 export default app;
