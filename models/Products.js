@@ -1,7 +1,7 @@
 import mongoose from "mongoose";
 
 const product = new mongoose.Schema({
-    gender:{type:mongoose.Schema.Types.ObjectId,ref:'genders'}, 
+    genre:{type:mongoose.Schema.Types.ObjectId,ref:'genres'}, 
     name:{type:String,required:true},
     photo:{type:String,required:true},
     price: {type:Number,required:true},
@@ -13,4 +13,4 @@ const product = new mongoose.Schema({
     sales : {type:Number,required:true},
 },{timestamps:true})
 
-export const Product = mongoose.model('product',product ) ;
+export const Product = mongoose.model('products',product ) ;

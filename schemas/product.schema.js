@@ -2,7 +2,7 @@ import Joi from "joi-oid";
 
 
 const product = Joi.object({
-    gender: Joi.objectId().required(),
+    genre: Joi.objectId().required(),
     name: Joi.string().required(),
     photo:Joi.string().uri().required(),
     price: Joi.number().required(),
