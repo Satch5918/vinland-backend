@@ -14,7 +14,7 @@ const controller = {
             next(error)
         }
     },
-    updatebuyer: async (req, res, next) => {
+    update_buyer: async (req, res, next) => {
         try {
             const { id } = req.params;
             await Buyer.findByIdAndUpdate({ _id: id }, req.body, { new: true });

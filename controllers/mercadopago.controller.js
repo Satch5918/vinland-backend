@@ -2,7 +2,7 @@ import axios from "axios";
 import {Product} from '../models/Products.js'
 
 const paymentController = {
-    createPayment: async (req, res) => {
+    create_payment: async (req, res) => {
         const items = req.body
         console.log(items);
         const products = []
@@ -34,7 +34,7 @@ const paymentController = {
         });
         return res.status(200).json({ url: mercadopagoResponse.data.init_point, success: true });  
     },
-    confirmPayment: async(req, res) => {
+    confirm_payment: async(req, res) => {
         const id = req.query.preference_id;
         const mercadopagoResponse = await axios.get('https://api.mercadopago.com/checkout/preferences/' + id, {
             headers: {
