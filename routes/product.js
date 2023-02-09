@@ -4,6 +4,7 @@ import validator from '../middlewares/validator.js';
 import product from '../schemas/product.schema.js';
 import isAdmin from '../middlewares/isAdmin.js';
 import controller from '../controllers/product.controller.js';
+import passport from "../config/passport.js";
 const {create , updated , destroyed , read_all , read_one , read_bestseller , read_last} = controller
 
 

@@ -3,7 +3,8 @@ let router = express.Router();
 import validator from '../middlewares/validator.js';
 import genre from '../schemas/genre.schema.js';
 import controller from '../controllers/genre.controller.js';
-
+import passport from "../config/passport.js";
+import isAdmin from '../middlewares/isAdmin.js';
 const { create , read_all , read_one} = controller
 
 
