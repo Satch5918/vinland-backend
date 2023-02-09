@@ -92,7 +92,7 @@ const controller = {
         }
     },
 
-    signintoken: async (req, res, next) => {
+    signin_token: async (req, res, next) => {
         let { user } = req
         try {
             req.body.success = true
