@@ -43,7 +43,7 @@ const controller = {
         "genre",
         "name -_id"
       ).select(
-        "-_id -demo -sales  -description -createdAt -updatedAt -__v"
+        "-demo -sales  -description -createdAt -updatedAt -__v"
       )
       req.body.success = true;
       req.body.sc = 201;
@@ -56,7 +56,7 @@ const controller = {
   read_one: async (req, res) => {
     const { id } = req.params;
     try {
-      let products = await Product.findById(id, "-_id -demo -sales  -description -createdAt -updatedAt -__v").populate(
+      let products = await Product.findById(id, "-sales -createdAt -updatedAt -__v").populate(
         "genre",
         "name -_id"
       );
@@ -74,7 +74,7 @@ const controller = {
         "genre",
         "name -_id"
       ).select(
-        "-_id -demo -sales  -description -createdAt -updatedAt -__v"
+        "-demo -sales  -description -createdAt -updatedAt -__v"
       ).sort('-sales').limit(2)
       req.body.success = true;
       req.body.sc = 201;
@@ -90,7 +90,7 @@ const controller = {
         "genre",
         "name -_id"
       ).select(
-        "-_id -demo -sales  -description -createdAt -updatedAt -__v"
+        "-demo -sales -createdAt -updatedAt -__v"
       ).sort('-createdAt').limit(4)
       req.body.success = true;
       req.body.sc = 201;
