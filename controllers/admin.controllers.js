@@ -3,7 +3,7 @@ import { User } from "../models/User.js";
 
 const adminController = {
 
-  updateLockUser: async (req, res, next) => {
+  update_lock_user: async (req, res, next) => {
     try {
       const { id } = req.params; 
       const updatedUser = await User.findOne({_id: id});
@@ -11,11 +11,10 @@ const adminController = {
       await updatedUser.save()
       res.status(200).json({ user: updatedUser});
     } catch (error) {
-      console.log(error)
       next(error)
     }
   },
-    getUsers: async(req, res, next) => {
+    get_users: async(req, res, next) => {
       try{
         let queries = {}
         if(req.query.is_lock ){
@@ -29,11 +28,10 @@ const adminController = {
           })
         );
       }catch(error){
-      console.log(error)
       next(error)
     }},
 
-    deleteUser: async (req, res) => {
+    delete_user: async (req, res, next) => {
       try {
         const { id } = req.params;
         await User.findByIdAndDelete({ _id: id });
@@ -42,7 +40,7 @@ const adminController = {
           response: "User deleted",
         });
       } catch (error) {
-        console.log(error);
+        next(error)
       }
     },
 

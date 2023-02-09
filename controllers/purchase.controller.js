@@ -1,11 +1,13 @@
 import { Purchase } from "../models/Purchase.js";
 import defaultResponse from "../config/response.js";
+import { Buyer } from "../models/Buyer.js";
 
 const controller = {
   create: async ( req, res, next ) => {
-    req.body.buyer_id = "Soy un id"
+    req.body.buyer_id = req.user.buyer_id
     try {
-      await Purchase.create(req.body)
+      const { _id } = await Purchase.create(req.body)
+      await Buyer.findByIdAndUpdate(req.user.buyer_id, {$push: {purchases: _id}})
       req.body.success = true
       req.body.sc = 201
       req.body.data = 'purchase created'

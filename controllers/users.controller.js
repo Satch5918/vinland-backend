@@ -3,6 +3,31 @@ import bcryptjs from 'bcryptjs' //modulo para hashear la contraseña
 import crypto from 'crypto' //modulo para generar codigos aleatorios
 import jwt from 'jsonwebtoken' //modulo para utilizar los metodos de jwt
 import defaultResponse from '../config/response.js'
+import { Buyer } from '../models/Buyer.js'
+import transporter from '../config/mailingConfig.js'
+
+const newBuyer = async (user_id) => {
+    const data = {
+        user_id,
+        address: ' ',
+        city: ' ',
+        country: ' ',
+        pursaches: []
+    }
+    await Buyer.create(data)
+}
+
+const sendMail = async (verify_code) => {
+    const frontPath = process.env.FRONT
+    const message = {
+        from: `"Vinland - Land of vinyls" ${process.env.EMAIL_MAILING}`,
+        to: req.body.mail,
+        subject: "User Validation",
+        text: "Validate your user pressing in the next link",
+        html: `<p>Press in the next link to validate your user <a href="${frontPath}/verify/${verify_code}">Press Here</a></p>`
+    } // Mensaje a enviar
+    await transporter.sendMail(message) // Envio del mail
+}
 
 const controller = {
 
@@ -16,7 +41,9 @@ const controller = {
         req.body.password = bcryptjs.hashSync(req.body.password, 10) //encripto o hasheo la contraseña
         try {
             //await accountVerificationEmail(req,res) //envío mail de verificación (SPRINT-4)
-            await User.create(req.body) //crea el usuario
+            const newUser = await User.create(req.body) //crea el usuario
+            await newBuyer(newUser._id)
+            await sendMail(req.body.verify_code)
             req.body.success = true
             req.body.sc = 201 //agrego el codigo de estado
             req.body.data = 'user created' //agrego el mensaje o información que necesito enviarle al cliente
@@ -65,7 +92,7 @@ const controller = {
         }
     },
 
-    signintoken: async (req, res, next) => {
+    signin_token: async (req, res, next) => {
         let { user } = req
         try {
             req.body.success = true
@@ -113,8 +140,20 @@ const controller = {
         } catch(error) {
             next(error)
         }        
-    }
+    },
 
+    verify: async(req, res, next) => {
+        const { verify_code } = req.params
+        try {
+            await User.findOneAndUpdate({ verify_code }, { is_verified: true })
+            req.body.success = true
+            req.body.sc = 201 
+            req.body.data = 'user verified'
+            return defaultResponse(req,res)
+        } catch (error) {
+            next(error)
+        }
+    }
 }
 
 export default controller

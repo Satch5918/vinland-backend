@@ -1,5 +1,5 @@
 import express  from "express";
-import passport from "passport";
+import passport from "../config/passport.js";
 import adminController from "../controllers/admin.controllers.js";
 import isAdmin from '../middlewares/isAdmin.js'
 

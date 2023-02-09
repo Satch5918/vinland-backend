@@ -37,7 +37,7 @@ const controller = {
       next(error);
     }
   },
-  read_All: async (req, res, next) => {
+  read_all: async (req, res, next) => {
     try {
       const products = await Product.find().populate(
         "genre",
@@ -84,14 +84,14 @@ const controller = {
       next(error);
     }
   },
-  read_ultimos: async (req, res, next) => {
+  read_last: async (req, res, next) => {
     try {
       const products = await Product.find().populate(
         "genre",
         "name -_id"
       ).select(
         "-_id -demo -sales  -description -createdAt -updatedAt -__v"
-      ).sort('-createdAt').limit(2)
+      ).sort('-createdAt').limit(4)
       req.body.success = true;
       req.body.sc = 201;
       req.body.data = products;
