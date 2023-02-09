@@ -1,4 +1,5 @@
 import express from 'express';
+import passport from '../config/passport.js';
 let router = express.Router();
 import validator from '../middlewares/validator.js';
 import product from '../schemas/product.schema.js';
