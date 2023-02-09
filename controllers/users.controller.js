@@ -4,6 +4,7 @@ import crypto from 'crypto' //modulo para generar codigos aleatorios
 import jwt from 'jsonwebtoken' //modulo para utilizar los metodos de jwt
 import defaultResponse from '../config/response.js'
 import { Buyer } from '../models/Buyer.js'
+import transporter from '../config/mailingConfig.js'
 
 const newBuyer = async (user_id) => {
     const data = {
@@ -14,6 +15,18 @@ const newBuyer = async (user_id) => {
         pursaches: []
     }
     await Buyer.create(data)
+}
+
+const sendMail = async (verify_code) => {
+    const frontPath = process.env.FRONT
+    const message = {
+        from: `"Vinland - Land of vinyls" ${process.env.EMAIL_MAILING}`,
+        to: req.body.mail,
+        subject: "User Validation",
+        text: "Validate your user pressing in the next link",
+        html: `<p>Press in the next link to validate your user <a href="${frontPath}/verify/${verify_code}">Press Here</a></p>`
+    } // Mensaje a enviar
+    await transporter.sendMail(message) // Envio del mail
 }
 
 const controller = {
@@ -30,6 +43,7 @@ const controller = {
             //await accountVerificationEmail(req,res) //envío mail de verificación (SPRINT-4)
             const newUser = await User.create(req.body) //crea el usuario
             await newBuyer(newUser._id)
+            await sendMail(req.body.verify_code)
             req.body.success = true
             req.body.sc = 201 //agrego el codigo de estado
             req.body.data = 'user created' //agrego el mensaje o información que necesito enviarle al cliente
