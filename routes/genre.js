@@ -7,7 +7,7 @@ import controller from '../controllers/genre.controller.js';
 const { create , read_all , read_one} = controller
 
 
-  router.post('/',validator(genre),create)
+  router.post('/',passport.authenticate('jwt',{session: false}),isAdmin,validator(genre),create)
   router.get('/',read_all)
   router.get('/:id',read_one)
 
