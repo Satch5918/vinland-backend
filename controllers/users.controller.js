@@ -140,8 +140,20 @@ const controller = {
         } catch(error) {
             next(error)
         }        
-    }
+    },
 
+    verify: async(req, res, next) => {
+        const { verify_code } = req.params
+        try {
+            await User.findOneAndUpdate({ verify_code }, { is_verified: true })
+            req.body.success = true
+            req.body.sc = 201 
+            req.body.data = 'user verified'
+            return defaultResponse(req,res)
+        } catch (error) {
+            next(error)
+        }
+    }
 }
 
 export default controller
