@@ -38,13 +38,38 @@ const controller = {
     }
   },
   read_all: async (req, res, next) => {
+    console.log(req.query);
+    let queriesToFilter = {}
+    let ordering = {}
+    let pagination = {
+        page:1 ,
+        limit: 100 
+    }
+    if(req.query.name){
+      queriesToFilter.name = { "$regex": req.query.name, $options: "i" };
+    }
+    if (req.query.genre){
+      queriesToFilter.genre = req.query.genre.split(",")
+    }
+    if (req.query.sort){
+        ordering = {name: req.query.sort}
+    }
+    if (req.query.page) {
+    pagination.page = req.query.page;
+    }
+    if (req.query.limit) {
+    pagination.limit = req.query.limit;
+    }
     try {
-      const products = await Product.find().populate(
+      const products = await Product.find(queriesToFilter).populate(
         "genre",
         "name -_id"
       ).select(
-        "-_id -demo -sales  -description -createdAt -updatedAt -__v"
+        "-demo -sales  -description -createdAt -updatedAt -__v"
       )
+        .sort(ordering)
+        .skip( pagination.page > 0 ? (pagination.page - 1) * pagination.limit : 0)
+        .limit(pagination.limit)
       req.body.success = true;
       req.body.sc = 201;
       req.body.data = products;
@@ -53,10 +78,10 @@ const controller = {
       next(error);
     }
   },
-  read_one: async (req, res) => {
+  read_one: async (req, res, next) => {
     const { id } = req.params;
     try {
-      let products = await Product.findById(id, "-_id -demo -sales  -description -createdAt -updatedAt -__v").populate(
+      let products = await Product.findById(id, "-sales -createdAt -updatedAt -__v").populate(
         "genre",
         "name -_id"
       );
@@ -74,12 +99,19 @@ const controller = {
         "genre",
         "name -_id"
       ).select(
-        "-_id -demo -sales  -description -createdAt -updatedAt -__v"
+        "-demo -sales  -description -createdAt -updatedAt -__v"
       ).sort('-sales').limit(2)
-      req.body.success = true;
-      req.body.sc = 201;
-      req.body.data = products;
-      return defaultResponse(req, res);
+      if (all) {
+        req.body.success = true;
+        req.body.sc = 200;
+        req.body.data = all;
+        return defaultResponse(req, res);
+    } else {
+        req.body.success = false;
+        req.body.sc = 404;
+        req.body.data = "not found";
+        return defaultResponse(req, res);
+    }
     } catch (error) {
       next(error);
     }
@@ -90,7 +122,7 @@ const controller = {
         "genre",
         "name -_id"
       ).select(
-        "-_id -demo -sales  -description -createdAt -updatedAt -__v"
+        "-demo -sales -createdAt -updatedAt -__v"
       ).sort('-createdAt').limit(4)
       req.body.success = true;
       req.body.sc = 201;
@@ -100,5 +132,50 @@ const controller = {
       next(error);
     }
   },
+/*   filter_products: async(req, res, next) => {
+    console.log(req.query) */
+
+/*     let queryToFilter = {}
+    let ordering = {}
+    let pagination= {
+      page: 1,
+      limit: 10
+    } */
+/*     if(req.query.name){
+      queryToFilter.name = { "$regex": req.query.name, $options: "i" };
+    }
+    if(req.query.genre){
+      queryToFilter.genre = req.query.genre.split(',')
+    }
+    if (req.query.sort){
+      ordering = {name: req.query.sort}
+    }
+    if (req.query.page) {
+    pagination.page = req.query.page;
+    }
+    if (req.query.limit) {
+			pagination.limit = req.query.limit;
+		} */
+/*     try{
+      let all = await Product.find(queryToFilter).populate("genre")
+      .sort(ordering)
+      .skip(pagination.page > 0 ? (pagination.page - 1) * pagination.limit: 0)
+      .limit(pagination.limit)
+      if(all){
+        req.body.success = true;
+            req.body.sc = 200;
+            req.body.data = all;
+            return defaultResponse(req, res);
+      }else{
+        req.body.success = false;
+            req.body.sc = 404;
+            req.body.data = "not found";
+            return defaultResponse(req, res);
+      }
+    }
+    catch(error){
+      next(error)
+    } */
+  
 };
 export default controller;

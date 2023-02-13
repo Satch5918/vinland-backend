@@ -16,7 +16,7 @@ const controller = {
 	read_all: async (req, res, next) => {
 		try {
 			const genre = await Genre.find().select(
-				"-_id -createdAt -updatedAt -__v"
+				"-createdAt -updatedAt -__v"
 			);
 			req.body.success = true;
 			req.body.sc = 201;

@@ -20,9 +20,9 @@ const paymentController = {
         const payload = {
             items: products,
             back_urls: {
-                success: `${process.env.BACKEND_URL}/payment/success`,
-                failure: `${process.env.BACKEND_URL}/payment/failure`,
-                pendient: `${process.env.BACKEND_URL}/payment/pendient`
+                success: `${process.env.FRONT}/payment/success`,
+                failure: `${process.env.FRONT}/payment/failure`,
+                pendient: `${process.env.FRONT}/payment/pendient`
             },
             auto_return: "approved",
         }
