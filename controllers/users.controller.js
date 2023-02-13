@@ -153,6 +153,20 @@ const controller = {
         } catch (error) {
             next(error)
         }
+    },
+    read_one: async(req, res, next) => {
+        const _id = req.params.id 
+        console.log(_id);
+        try{
+            const user = await User.findById(_id)
+            req.body.success = true;
+            req.body.sc = 201;
+            req.body.data = user;
+            return defaultResponse(req, res);
+        }
+        catch(error){
+            console.log(error);
+        }
     }
 }
 
