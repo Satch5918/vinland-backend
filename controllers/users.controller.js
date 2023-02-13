@@ -155,17 +155,15 @@ const controller = {
         }
     },
     read_one: async(req, res, next) => {
-        const _id = req.params.id 
-        console.log(_id);
         try{
-            const user = await User.findById(_id)
+            const user = await User.findOne({user_id: req.user.id})
             req.body.success = true;
             req.body.sc = 201;
             req.body.data = user;
             return defaultResponse(req, res);
         }
         catch(error){
-            console.log(error);
+            next(error)
         }
     }
 }

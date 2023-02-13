@@ -26,6 +26,19 @@ const controller = {
             next(error);
         }
       },
+    read: async (req, res, next) => {
+        try{
+            const buyer = await Buyer.findOne({user_id: req.user.id})
+            console.log(buyer);
+            req.body.success = true;
+            req.body.sc = 200;
+            req.body.data = buyer;
+            return defaultResponse(req, res);
+        }
+        catch(error){
+            next(error);
+        }
+    }
 }
 
 

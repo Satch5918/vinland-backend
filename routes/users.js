@@ -18,6 +18,6 @@ router.post('/token',passport.authenticate('jwt', { session:false }),mustSignIn,
 router.put('/signout',passport.authenticate('jwt', { session:false }),signout)
 router.put('/verify/:verify_code', verify)
 router.get('/',read)
-router.get("/:id", read_one)
+router.get("/user", passport.authenticate('jwt', { session:false }), read_one)
 
 export default router
