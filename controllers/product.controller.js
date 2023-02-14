@@ -43,7 +43,7 @@ const controller = {
     let ordering = {}
     let pagination = {
         page:1 ,
-        limit: 100 
+        limit: 10 
     }
     if(req.query.name){
       queriesToFilter.name = { "$regex": req.query.name, $options: "i" };
