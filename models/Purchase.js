@@ -2,10 +2,10 @@ import mongoose from "mongoose";
 
 const schema = new mongoose.Schema(
 	{
-		buyer_id: { type: mongoose.Types.ObjectId, require: true },
-		status: { type: String, require: true },
-		products: { type: Array, require: true },
-		total: { type: Number, require: true },
+		buyer_id: { type: mongoose.Types.ObjectId, required: true },
+		status: { type: String, required: true },
+		products: { type: [{product_id: {type: mongoose.Types.ObjectId, required: true, ref: 'products'}, quantity: {type: Number, required: true}}], require: true },
+		total: { type: Number, required: true },
 	},
 	{
 		timestamps: true,

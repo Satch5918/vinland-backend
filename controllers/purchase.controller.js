@@ -17,9 +17,9 @@ const controller = {
     }
   },
   my_purchases: async ( req, res, next ) => {
-    req.body.buyer_id = "Soy un i"
+    const { buyer_id } = req.user
     try {
-      const purchases = await Purchase.find({ buyer_id: req.body.buyer_id })
+      const purchases = await Purchase.find({ buyer_id })
       req.body.success = true
       req.body.sc = 200
       req.body.data = purchases
@@ -43,7 +43,7 @@ const controller = {
     let query = {}
     const { id } = req.params
     query._id = id
-    query.buyer_id = "Soy un id"
+    query.buyer_id = req.user.buyer_id
     try {
       const purchase = await Purchase.findOne(query)
       req.body.success = true
