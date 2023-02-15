@@ -1,4 +1,4 @@
-import defaultResponse from "../../minga-back/config/response.js"
+import defaultResponse from "../config/response.js"
 
 async function isAdmin(req,res,next) {
     if (req.user.is_admin) {

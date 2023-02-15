@@ -1,28 +1,55 @@
-/* import { User } from '../models/User.js' */
-
+import { User } from '../models/User.js' 
 import bcryptjs from 'bcryptjs' //modulo para hashear la contraseña
 import crypto from 'crypto' //modulo para generar codigos aleatorios
 import jwt from 'jsonwebtoken' //modulo para utilizar los metodos de jwt
 import defaultResponse from '../config/response.js'
+import { Buyer } from '../models/Buyer.js'
+import transporter from '../config/mailingConfig.js'
+
+const newBuyer = async (user_id) => {
+    const data = {
+        user_id,
+        address: ' ',
+        city: ' ',
+        country: ' ',
+        pursaches: []
+    }
+    await Buyer.create(data)
+}
+
+const sendMail = async (verify_code, mail) => {
+    const frontPath = process.env.FRONT
+    const message = {
+        from: `"Vinland - Land of vinyls" ${process.env.EMAIL_MAILING}`,
+        to: mail,
+        subject: "User Validation",
+        text: "Validate your user pressing in the next link",
+        html: `<p>Press in the next link to validate your user <a href="${frontPath}/verify/${verify_code}">Press Here</a></p>`
+    } // Mensaje a enviar
+    await transporter.sendMail(message) // Envio del mail
+}
 
 const controller = {
 
     signup: async (req, res, next) => {
         req.body.is_online = false //agrego las propiedades que el cliente NO envió
         req.body.is_admin = false
-        req.body.is_author = false
-        req.body.is_company = false
-        req.body.is_verified = true //por ahora en true
+        req.body.is_buyer = true
+        req.body.is_lock = false
+        req.body.is_verified = false
         req.body.verify_code = crypto.randomBytes(10).toString('hex') //defino el codigo de verificacion por mail
         req.body.password = bcryptjs.hashSync(req.body.password, 10) //encripto o hasheo la contraseña
         try {
             //await accountVerificationEmail(req,res) //envío mail de verificación (SPRINT-4)
-            await User.create(req.body) //crea el usuario
+            const newUser = await User.create(req.body) //crea el usuario
+            await newBuyer(newUser._id)
+            await sendMail(req.body.verify_code, req.body.email)
             req.body.success = true
             req.body.sc = 201 //agrego el codigo de estado
             req.body.data = 'user created' //agrego el mensaje o información que necesito enviarle al cliente
             return defaultResponse(req,res) //retorno la respuesta default
         } catch (error) {
+            console.log(error)
             next(error) //respuesta del manejador de errores
         }
     },
@@ -34,7 +61,7 @@ const controller = {
             const verified = bcryptjs.compareSync(password, user.password) //comparo contraseña
             if(verified) {
                 await User.findOneAndUpdate( //busco y actualizo
-                    { mail: user.mail }, //parametro de busqueda
+                    { email: user.email }, //parametro de busqueda
                     { is_online: true }, //parametro a modificar
                     { new: true } //especificacion que reemplace el documento de origen
                 )
@@ -45,12 +72,11 @@ const controller = {
                 )
                 //console.log(token)
                 user = { //protejo mas datos sensibles
-                    mail: user.mail,
-                    photo: user.photo,
+                    email: user.email,
                     is_admin: user.is_admin,
-                    is_author: user.is_author,
-                    is_company: user.is_company,
-                    is_verified: user.is_verified
+                    is_buyer: user.is_author,
+                    is_lock: user.is_lock,
+                    /* is_verified: user.is_verified */
                 }
                 req.body.success = true
                 req.body.sc = 200
@@ -66,7 +92,7 @@ const controller = {
         }
     },
 
-    signintoken: async (req, res, next) => {
+    signin_token: async (req, res, next) => {
         let { user } = req
         try {
             req.body.success = true
@@ -79,11 +105,11 @@ const controller = {
     },
 
     signout: async (req, res, next) => {
-        const { mail } = req.user
+        const { email } = req.user
         try {
             //si tiene éxito debe cambiar online de true a false
             await User.findOneAndUpdate(
-                { mail }, //parametro de busqueda
+                { email }, //parametro de busqueda
                 { is_online: false }, //parametro a modificar
                 { new: true } //especificacion que reemplace el documento de origen
 
@@ -114,8 +140,32 @@ const controller = {
         } catch(error) {
             next(error)
         }        
-    }
+    },
 
+    verify: async(req, res, next) => {
+        const { verify_code } = req.params
+        try {
+            await User.findOneAndUpdate({ verify_code }, { is_verified: true })
+            req.body.success = true
+            req.body.sc = 201 
+            req.body.data = 'user verified'
+            return defaultResponse(req,res)
+        } catch (error) {
+            next(error)
+        }
+    },
+    read_one: async(req, res, next) => {
+        try{
+            const user = await User.findOne({user_id: req.user.id})
+            req.body.success = true;
+            req.body.sc = 201;
+            req.body.data = user;
+            return defaultResponse(req, res);
+        }
+        catch(error){
+            next(error)
+        }
+    }
 }
 
 export default controller
