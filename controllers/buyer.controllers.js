@@ -16,8 +16,8 @@ const controller = {
     },
     update_buyer: async (req, res, next) => {
         try {
-            const { id } = req.params;
-            await Buyer.findByIdAndUpdate({ _id: id }, req.body, { new: true });
+
+            await Buyer.findOneAndUpdate({ user_id: req.user.id }, req.body, { new: true });
             req.body.success = true;
             req.body.sc = 200;
             req.body.data = "update buyer";
