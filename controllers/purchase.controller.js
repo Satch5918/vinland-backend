@@ -11,7 +11,7 @@ const controller = {
       await Buyer.findByIdAndUpdate(req.user.buyer_id, {$push: {purchases: _id}})
       req.body.success = true
       req.body.sc = 201
-      req.body.data = 'purchase created'
+      req.body.data = _id
       return defaultResponse(req, res)
     } catch (error) {
       next(error)
