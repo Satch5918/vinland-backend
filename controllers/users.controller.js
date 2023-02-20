@@ -156,7 +156,8 @@ const controller = {
     },
     read_one: async(req, res, next) => {
         try{
-            const user = await User.findOne({user_id: req.user.id})
+            const user = await User.findOne({_id: req.user.id})
+            console.log(user);
             req.body.success = true;
             req.body.sc = 201;
             req.body.data = user;
@@ -164,6 +165,22 @@ const controller = {
         }
         catch(error){
             next(error)
+        }
+    },
+    edit_one: async(req, res, next) => {
+        let userInfo = req.body
+        console.log(userInfo);
+        console.log(req.user.id);
+        try{
+            const user = await User.findOneAndUpdate({_id: req.user.id}, req.body, {new: true})
+            console.log(user);
+            req.body.success = true;
+            req.body.sc = 201;
+            req.body.data = user;
+            return defaultResponse(req, res);
+        }
+        catch(error){
+            console.log(error);
         }
     }
 }
