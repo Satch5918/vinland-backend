@@ -46,7 +46,7 @@ const controller = {
     query._id = id
     query.buyer_id = req.user.buyer_id
     try {
-      const purchase = await Purchase.findOne(query)
+      const purchase = await Purchase.findOne(query).populate('products.product_id', 'name photo price')
       req.body.success = true
       req.body.sc = 200
       req.body.data = purchase
