@@ -9,7 +9,7 @@ const {create, update_buyer, read} = controller
 let router = express.Router()
 
 router.post('/',passport.authenticate('jwt',{session: false}),validator(schema),create)
-router.put('/:id',passport.authenticate('jwt',{session: false}),validator(schema),update_buyer)
+router.put('/edit-buyer',passport.authenticate('jwt',{session: false}),validator(schema),update_buyer)
 router.get('/',passport.authenticate('jwt',{session: false}) ,read)
 
 export default router
