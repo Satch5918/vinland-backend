@@ -5,6 +5,7 @@ import { Buyer } from "../models/Buyer.js";
 const controller = {
   create: async ( req, res, next ) => {
     req.body.buyer_id = req.user.buyer_id
+    req.body.status = "pending"
     try {
       const { _id } = await Purchase.create(req.body)
       await Buyer.findByIdAndUpdate(req.user.buyer_id, {$push: {purchases: _id}})
