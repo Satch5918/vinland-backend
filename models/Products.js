@@ -10,7 +10,7 @@ const product = new mongoose.Schema({
     description:{type:String,required:true},
     artist : {type:String,required:true},
     date : {type:Date},
-    sales : {type:Number,required:true},
+    sales : {type:Number},
 },{timestamps:true})
 
 export const Product = mongoose.model('products',product ) ;
