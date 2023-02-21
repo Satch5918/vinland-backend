@@ -9,7 +9,7 @@ import mustSignIn from '../middlewares/mustSignIn.js'
 import controller from '../controllers/users.controller.js'
 import passport from '../config/passport.js'
 
-const { signup,signin,signin_token,signout,read, verify, read_one } = controller
+const { signup,signin,signin_token,signout,read, verify, read_one, edit_one } = controller
 
 let router = express.Router()
 router.post('/signup', accountExistsSignUp, validator(schema),signup)
@@ -19,5 +19,6 @@ router.put('/signout',passport.authenticate('jwt', { session:false }),signout)
 router.put('/verify/:verify_code', verify)
 router.get('/',read)
 router.get("/user", passport.authenticate('jwt', { session:false }), read_one)
+router.put("/edit-user", passport.authenticate('jwt', { session:false }), edit_one)
 
 export default router

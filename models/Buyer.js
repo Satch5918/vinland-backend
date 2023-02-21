@@ -2,7 +2,7 @@ import mongoose from 'mongoose'
 
 const schema = new mongoose.Schema(
     {   
-        user_id: {type: mongoose.Types.ObjectId, ref:"user", required: true},
+        user_id: {type: mongoose.Types.ObjectId, ref:"users", required: true},
         address: {type: String, required: true},
         city: {type: String, required: true},
         country: {type: String, required: true},

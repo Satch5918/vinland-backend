@@ -11,8 +11,8 @@ const { create, my_purchases, read, my_details, destroy, update } = controller
 
 router.get('/', read)
 router.post('/', passport.authenticate('jwt',{session: false}), validator(schema), isBuyer, create)
-router.get('/me', passport.authenticate('jwt',{session: false}), my_purchases)
-router.get('/:id', passport.authenticate('jwt',{session: false}), my_details)
+router.get('/me', passport.authenticate('jwt',{session: false}), isBuyer, my_purchases)
+router.get('/:id', passport.authenticate('jwt',{session: false}), isBuyer, my_details)
 router.delete('/:id', passport.authenticate('jwt',{session: false}), isAdmin, destroy)
 router.put('/:id', passport.authenticate('jwt',{session: false}), isAdmin, update)
 
