@@ -28,7 +28,7 @@ const controller = {
       },
     read: async (req, res, next) => {
         try{
-            const buyer = await Buyer.findOne({user_id: req.user.id})
+            const buyer = await Buyer.findOne({user_id: req.user.id}).populate('user_id', 'email')
             console.log(buyer);
             req.body.success = true;
             req.body.sc = 200;
